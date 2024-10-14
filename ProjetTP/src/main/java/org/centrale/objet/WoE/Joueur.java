@@ -25,35 +25,32 @@ public class Joueur {
        }
     /**
      *
-     * @param x
-     * @param y
      */
     public void deplace(){
          Scanner sc = new Scanner(System.in);
          System.out.println("Ou voulez-vous vous déplacer ? (1: avant, 2: derriere, 3:droite, 4:gauche)");
-         int choix = sc.nextInt();
+         String choix = sc.nextLine();
          int dx=0;
          int dy=0;
          switch (choix) {
            
-            case 1:
+            case "1" -> {
                 dx=0;
                 dy=1;
-                break;
-            case 2:
+            }
+            case "2" -> {
                 dx=0;
                 dy=-1;
-                break;
-            case 3:
+            }
+            case "3" -> {
                 dx=1;
                 dy=0;
-                break;
-            case 4:
+            }
+            case "4" -> {
                 dx=-1;
                 dy=0;
-                break;
-            default:
-                System.out.println("Choix invalide.");
+            }
+            default -> System.out.println("Choix invalide.");
           }
         if (w.testerPositionsOccupees(this.perso.getPos().getX()+dx,this.perso.getPos().getY()+dy)){
             System.out.println("La position est occupée");
@@ -77,52 +74,51 @@ public class Joueur {
             System.out.println("Wrong letter !!!!");
         }        
         }
-        keyboard.close();
+       
         
         switch (c) {
-            case "A" -> perso = new Archer();
-            case "G" -> perso = new Guerrier();
+            case "A" -> this.perso = new Archer();
+            case "G" ->  this.perso = new Guerrier();
                          
         }
     }
-    public void Jouer(World w){
+    public void Jouer(){
         int i=1;
         Scanner sc = new Scanner(System.in);
         while (this.perso.getPtVie()>0){
-        System.out.println("tour : "+i);
-        System.out.println("Que voulez-vous faire ? (1: Se déplacer, 2: Combattre)");
-        int choix = sc.nextInt();
-        switch (choix) {
+            System.out.println("tour : "+i);
+            i++;
+            System.out.println("Que voulez-vous faire ? (1: Se deplacer, 2: Combattre)");
+            String choix = sc.nextLine();
+            switch (choix) {
            
-            case 1:
-                this.deplace();
-                break;
-            case 2:
-                Random rand = new Random();
-                int r1=rand.nextInt(2);
-                if (r1==0){
-                int r = rand.nextInt(w.getPersonnages().size());
-                if (this.perso instanceof Guerrier guerrier){
-                    guerrier.combattre(w.getPersonnages().get(r));
-                }
-                else {
-                        ((Archer) this.perso).combattre(w.getPersonnages().get(r));
+                case "1" -> this.deplace();
+                case "2" -> {
+                    Random rand = new Random();
+                    int r1=rand.nextInt(2);
+                    if (r1==0){
+                        int r = rand.nextInt(this.w.getPersonnages().size());
+                        if (this.perso instanceof Guerrier guerrier){
+                            guerrier.combattre(this.w.getPersonnages().get(r));
                         }
-                }
-                else{
-                    int r = rand.nextInt(w.getMonstres().size());
-                if (this.perso instanceof Guerrier guerrier){
-                    guerrier.combattre(w.getMonstres().get(r));
-                }
-                else {
-                        ((Archer) this.perso).combattre(w.getMonstres().get(r));
+                        else {
+                            ((Archer) this.perso).combattre(this.w.getPersonnages().get(r));
                         }
+                    }
+                    else{
+                        int r = rand.nextInt(this.w.getMonstres().size());
+                        if (this.perso instanceof Guerrier guerrier){
+                            guerrier.combattre(this.w.getMonstres().get(r));
+                        }
+                        else {
+                            ((Archer) this.perso).combattre(this.w.getMonstres().get(r));
+                        }
+                    }
                 }
-                break;
-            default:
-                System.out.println("Choix invalide.");
+            default -> System.out.println("Choix invalide.");
+            }
         }
-    }
+        
     }
 }
 

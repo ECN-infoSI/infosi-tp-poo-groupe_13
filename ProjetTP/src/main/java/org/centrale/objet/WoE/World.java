@@ -117,29 +117,48 @@ public class World {
     /**
      * Cette méthode permet de créer un monde et de placer les créatures aléatoirement
      */
-    public void creerMondeAlea(){
-        LinkedList<Point2D> positionsUtilisees = new LinkedList<>();
+   public void creerMondeAlea() {
         Random rand = new Random();
-        for (Personnage perso:this.personnages)  {
-        perso.setPos(new Point2D(rand.nextInt(this.carre),rand.nextInt(this.carre)));
-        positionsUtilisees.add(perso.getPos());
+        Set<Point2D> positionsUtilisees = new HashSet<>(); // Set pour garantir l'unicité des positions
+
+        // Générer 50 personnages
+        for (int i = 0; i < 50; i++) {
+            Personnage perso = new Personnage();
+            perso.setPos(genererPositionUnique(positionsUtilisees, rand));
+            this.ajouterPersonnage(perso);
         }
-        for (Monstre mo:this.monstres)  {
-        mo.setPos(new Point2D(rand.nextInt(this.carre),rand.nextInt(this.carre)));
-        positionsUtilisees.add(mo.getPos());
+
+        // Générer 50 monstres
+        for (int i = 0; i < 50; i++) {
+            Monstre monstre = new Monstre();
+            monstre.setPos(genererPositionUnique(positionsUtilisees, rand));
+            this.ajouterMonstre(monstre);
         }
-        for (Objet ob:this.objets)  {
-        ob.setPos(new Point2D(rand.nextInt(this.carre),rand.nextInt(this.carre)));
-        positionsUtilisees.add(ob.getPos());
+
+        // Générer 50 objets
+        for (int i = 0; i < 50; i++) {
+            Objet objet = new Objet();
+            objet.setPos(genererPositionUnique(positionsUtilisees, rand));
+            this.ajouterObjet(objet);
         }
-        boolean hasDuplicate = hasDuplicates(positionsUtilisees);
-        if (hasDuplicate) {
-            System.out.println("La liste contient des doublons.");
-        } else {
-            System.out.println("La liste ne contient pas de doublons.");
-        }
+
+        System.out.println("Le monde a été généré avec 50 personnages, 50 monstres, et 50 objets.");
     }
 
+    /**
+     * Génère une position aléatoire unique qui n'a pas encore été utilisée.
+     * @param positionsUtilisees Set des positions déjà utilisées
+     * @param rand Instance de Random pour générer des positions aléatoires
+     * @return Une position unique non utilisée
+     */
+    private Point2D genererPositionUnique(Set<Point2D> positionsUtilisees, Random rand) {
+        Point2D pos;
+        do {
+            pos = new Point2D(rand.nextInt(this.carre), rand.nextInt(this.carre));
+        } while (positionsUtilisees.contains(pos));  // Vérifie si la position est déjà utilisée
+        positionsUtilisees.add(pos);  // Marque cette position comme utilisée
+        return pos;
+    }
     /**
      *Cette méthode permet de vérifier si la liste contient des doublons
      * @param list

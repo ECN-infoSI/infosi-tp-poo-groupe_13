@@ -21,7 +21,12 @@ public class TestWoE {
      */
     public static void main(String[] args) {
        World w=new World();
+       w.creerMondeAlea();
+       System.out.println(w.getMonstres());
        Joueur j=new Joueur(w);
+       j.Jouer();
+       
+               
        
     }
 }

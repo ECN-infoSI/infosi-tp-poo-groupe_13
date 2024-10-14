@@ -56,7 +56,7 @@ public class Personnage extends Creature{
      */
     public Personnage(){
         Point2D p = new Point2D();
-        this("Person",0,0,0,0,0,0,p);
+        this("Person",100,0,0,0,0,0,p);
 
     }
 
