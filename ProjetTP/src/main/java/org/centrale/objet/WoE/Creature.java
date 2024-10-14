@@ -176,7 +176,7 @@ public class Creature extends ElementDeJeu implements Deplacable{
         int dy = DIRECTIONS[direction][1];
 
         // Translate the position
-        
+        this.getPos().translate(dx, dy); 
     }
 
     /**
@@ -188,7 +188,7 @@ public class Creature extends ElementDeJeu implements Deplacable{
         System.out.println("Points de parade: " + this.ptPar);
         System.out.println("Page d'attaque: " + this.pageAtt);
         System.out.println("Page de parade: " + this.pagePar);
-        
+        System.out.println("["+this.getPos().getX()+","+this.getPos().getY()+"]");
     }
     
     

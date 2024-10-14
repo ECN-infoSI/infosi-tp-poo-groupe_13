@@ -39,7 +39,7 @@ public class World {
         this.personnages = new LinkedList<>();
         this.monstres = new LinkedList<>();
         this.objets = new LinkedList<>();
-
+        this.carre=50;
     }
 
     /**
@@ -105,7 +105,15 @@ public class World {
     public int getCarre() {
         return carre;
     }
-       
+
+    public LinkedList<Personnage> getPersonnages() {
+        return personnages;
+    }
+
+    public LinkedList<Monstre> getMonstres() {
+        return monstres;
+    }
+    
     /**
      * Cette méthode permet de créer un monde et de placer les créatures aléatoirement
      */
@@ -171,6 +179,24 @@ public class World {
             m.getPos().affiche();
 }
     }
+    public boolean testerPositionsOccupees(int x, int y) {
+        // Vérification parmi les personnages
+        for (Personnage perso : this.personnages) {
+            if (perso.getPos().getX() == x && perso.getPos().getY() == y) {
+                return true; // La position est occupée par un personnage
+            }
+        }
+
+        // Vérification parmi les monstres
+        for (Monstre monstre : this.monstres) {
+            if (monstre.getPos().getX() == x && monstre.getPos().getY() == y) {
+                return true; // La position est occupée par un monstre
+            }
+        
+        }
+    return false;
+    }
+
 }
 
     
