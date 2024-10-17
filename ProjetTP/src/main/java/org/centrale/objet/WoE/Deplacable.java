@@ -6,8 +6,9 @@ package org.centrale.objet.WoE;
 
 /**
  *
- * @author Nadhem
+ * @author leovdb
  */
 public interface Deplacable {
+
     void deplace();
 }

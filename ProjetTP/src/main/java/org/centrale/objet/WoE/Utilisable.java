@@ -7,11 +7,8 @@ package org.centrale.objet.WoE;
 /**
  *
  * @author leovdb
- *
  */
-public interface Combattant {
+public interface Utilisable {
 
-    void combattre(Creature c);
-    
-    int getDistAttMax();
+    void utiliser(Personnage perso);
 }

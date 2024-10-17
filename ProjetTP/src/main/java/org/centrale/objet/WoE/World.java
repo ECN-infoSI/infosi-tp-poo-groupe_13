@@ -3,174 +3,330 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package org.centrale.objet.WoE;
-import java.util.Random;
-import java.util.LinkedList;
-import java.util.HashSet;
-import java.util.Iterator;
+
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
+import java.util.Random;
+import java.util.Scanner;
 
 /**
  *
- * @author Nadhem
+ * @author leovdb
  */
-public class World {
-    /**
-     * représente la liste des personnages présents dans le monde
-     */
-    private LinkedList<Personnage> personnages;
-    /**
-     * représente la liste des monstres présents dans le monde
-     */
-    private LinkedList<Monstre> monstres;
-    /**
-     * représente la liste des objets présents dans le monde
-     */
-    private LinkedList<Objet> objets;
-    /**
-     * représente la taille du monde
-     */
-    private int carre;
-    
-    /**
-     *
-     */
-    public World(){
-        this.personnages = new LinkedList<>();
-        this.monstres = new LinkedList<>();
-        this.objets = new LinkedList<>();
+public final class World {
 
+    private static int tailleGrille;
+    private static ElementDeJeu[][] grille;
+    private List<Personnage> personnages;
+    private List<Monstre> monstres;
+    private List<Objet> objets;
+    private static Joueur joueur;
+    private Scanner scanner;
+
+    public World(int tailleGrille, int nbPersonnages, int nbMonstres, int nbObjets) {
+        this.tailleGrille = tailleGrille;
+        grille = new ElementDeJeu[tailleGrille][tailleGrille];
+        personnages = new ArrayList<>();
+        monstres = new ArrayList<>();
+        objets = new ArrayList<>();
+        scanner = new Scanner(System.in);
+        creerMondeAlea(nbPersonnages, nbMonstres, nbObjets);
+        joueur = new Joueur(this);
+        joueur.creationJoueur();
+        placerSurGrille(joueur.getPersonnage());
     }
 
-    /**
-     * Permet d'ajouter un personnage à la liste
-     * @param p
-     */
-    public void ajouterPersonnage(Personnage p) {
-        personnages.add(p);
-    }
-
-    /**
-     * Permet d'ajouter un monstre à la liste
-     * @param m
-     */
-    public void ajouterMonstre(Monstre m) {
-        monstres.add(m);
-    }
-
-    /**
-     * Permet d'ajouter un objet à la liste
-     * @param o
-     */
-    public void ajouterObjet(Objet o) {
-        objets.add(o);
-    }
-
-    /**
-     * Permet de supprimer un personnage de la liste
-     * @param p
-     */
-    public void supprimerPersonnage(Personnage p) {
-        personnages.remove(p);
-    }
-
-    /**
-     * Permet de supprimer un monstre de la liste
-     * @param m
-     */
-    public void supprimerMonstre(Monstre m) {
-        monstres.remove(m);
-    }
-
-    /**
-     * Permet de supprimer un objet de la liste
-     * @param o
-     */
-    public void supprimerObjet(Objet o) {
-        objets.remove(o);
-    }
-
-    /**
-     *
-     * @param carre
-     */
-    public void setCarre(int carre) {
-        this.carre = carre;
-    }
-
-    /**
-     *
-     * @return
-     */
-    public int getCarre() {
-        return carre;
-    }
-       
-    /**
-     * Cette méthode permet de créer un monde et de placer les créatures aléatoirement
-     */
-    public void creerMondeAlea(){
-        LinkedList<Point2D> positionsUtilisees = new LinkedList<>();
+    public static Personnage creerPersonnageAlea(String nom) {
         Random rand = new Random();
-        for (Personnage perso:this.personnages)  {
-        perso.setPos(new Point2D(rand.nextInt(this.carre),rand.nextInt(this.carre)));
-        positionsUtilisees.add(perso.getPos());
+        return switch (rand.nextInt(3)) {
+            case 0 ->
+                new Archer(nom + "-Archer");
+            case 1 ->
+                new Guerrier(nom + "-Guerrier");
+            case 2 ->
+                new Paysan(nom + "-Paysan");
+            default ->
+                new Personnage();
+        };
+    }
+
+    public static Monstre creerMonstreAlea() {
+        Random rand = new Random();
+        return switch (rand.nextInt(2)) {
+            case 0 ->
+                new Loup();
+            case 1 ->
+                new Lapin();
+            default ->
+                new Monstre();
+        };
+    }
+
+    public static Objet creerObjetAlea() {
+        Random rand = new Random();
+        return switch (rand.nextInt(5)) {
+            case 0 ->
+                new PotionSoin();
+            case 1 ->
+                new Epee();
+            case 2 ->
+                new NuageToxique();
+            case 3 ->
+                new PommeEnchantee();
+            case 4 ->
+                new PommeDeLaDiscorde();
+            default ->
+                new Objet();
+        };
+    }
+
+    public void creerMondeAlea(int nbPersonnages, int nbMonstres, int nbObjets) {
+
+        for (int i = 0; i < nbPersonnages; i++) {
+            Personnage personnage = creerPersonnageAlea(Integer.toString(i));
+            placerSurGrille(personnage);
+            personnages.add(personnage);
         }
-        for (Monstre mo:this.monstres)  {
-        mo.setPos(new Point2D(rand.nextInt(this.carre),rand.nextInt(this.carre)));
-        positionsUtilisees.add(mo.getPos());
+
+        for (int i = 0; i < nbMonstres; i++) {
+            Monstre monstre = creerMonstreAlea();
+            placerSurGrille(monstre);
+            monstres.add(monstre);
         }
-        for (Objet ob:this.objets)  {
-        ob.setPos(new Point2D(rand.nextInt(this.carre),rand.nextInt(this.carre)));
-        positionsUtilisees.add(ob.getPos());
-        }
-        boolean hasDuplicate = hasDuplicates(positionsUtilisees);
-        if (hasDuplicate) {
-            System.out.println("La liste contient des doublons.");
-        } else {
-            System.out.println("La liste ne contient pas de doublons.");
+
+        for (int i = 0; i < nbObjets; i++) {
+            Objet objet = creerObjetAlea();
+            placerSurGrille(objet);
+            objets.add(objet);
         }
     }
 
-    /**
-     *Cette méthode permet de vérifier si la liste contient des doublons
-     * @param list
-     * @return
-     */
-    public static boolean hasDuplicates(List<?> list) {
-    Set<Object> set = new HashSet<>(list);  // Conversion de la liste en Set
-    return set.size() < list.size();  // Si la taille du Set est plus petite, il y a des doublons
+    public void placerSurGrille(ElementDeJeu element) {
+        Random rand = new Random();
+        int x, y;
+        do {
+            x = rand.nextInt(tailleGrille);
+            y = rand.nextInt(tailleGrille);
+        } while (grille[x][y] != null);
+        grille[x][y] = element;
+        element.setPos(new Point2D(x, y));
     }
 
-    /**
-     * Elle permet  de calculer le total des points de vie des personnages
-     * @return
-     */
-    public int calculerTotalPointsDeVie() {
-        
-        int totalPointsDeVie = 0;
-        Iterator<Personnage> it = personnages.iterator();
-        while (it.hasNext()) {
-            totalPointsDeVie += it.next().getPtVie();
-        }
+    public static Point2D calculerNouvellePosition(Point2D positionActuelle, int direction) {
+        int x = positionActuelle.getX();
+        int y = positionActuelle.getY();
 
-        System.out.println(totalPointsDeVie);
-        
-        return totalPointsDeVie;
+        return switch (direction) {
+            case 7 ->
+                new Point2D(x - 1, y - 1);
+            case 8 ->
+                new Point2D(x, y - 1);
+            case 9 ->
+                new Point2D(x + 1, y - 1);
+            case 4 ->
+                new Point2D(x - 1, y);
+            case 6 ->
+                new Point2D(x + 1, y);
+            case 1 ->
+                new Point2D(x - 1, y + 1);
+            case 2 ->
+                new Point2D(x, y + 1);
+            case 3 ->
+                new Point2D(x + 1, y + 1);
+            default -> {
+                System.out.println("Direction invalide.");
+                yield null;
+            }
+        };
     }
 
-    /**
-     * Elle permet d'afficher le nom et la position des creatures
-     */
-    public void afficher(){
-        for (Personnage perso:this.personnages)  {
-            System.out.println(perso.getNom());
-            perso.getPos().affiche();
+    public static List<Creature> selectCibles(Point2D positionCreature, int porteeAttaque) {
+
+        List<Creature> ciblesPotentielles = new ArrayList<>();
+
+        for (int i = positionCreature.getX() - porteeAttaque; i <= positionCreature.getX() + porteeAttaque; i++) {
+            for (int j = positionCreature.getY() - porteeAttaque; j <= positionCreature.getY() + porteeAttaque; j++) {
+                if (i >= 0 && i < grille.length && j >= 0 && j < grille[0].length) {
+                    if (!((i == positionCreature.getX()) && (j == positionCreature.getY()))) {
+                        ElementDeJeu element = grille[i][j];
+                        if (element instanceof Creature creature) {
+                            ciblesPotentielles.add(creature);
+                        }
+                    }
+
+                }
+            }
         }
-        for (Monstre m:this.monstres)  {
-            m.getPos().affiche();
+
+        return ciblesPotentielles;
+    }
+
+    public static void afficherWorld() {
+        joueur.getPersonnage().affiche();
+        System.out.println("\nVotre inventaire : ");
+        joueur.getPersonnage().afficherInventaire();
+        System.out.println("Vos effets : ");
+        joueur.getPersonnage().afficherEffets();
+        System.out.println("\nMonde : ");
+        for (int j = 0; j < tailleGrille; j++) {
+            for (int i = 0; i < tailleGrille; i++) {
+                if (grille[i][j] != null) {
+                    String name = grille[i][j].toString();
+                    System.out.print(name + "  ");
+                } else {
+                    System.out.print(".....  ");
+                }
+            }
+            System.out.println();
+        }
+        System.out.println("Votre position : ");
+        joueur.afficherPosition();
+    }
+
+    public static boolean estDeplacementValide(Point2D nouvellePos) {
+        int x = nouvellePos.getX();
+        int y = nouvellePos.getY();
+
+        if (x >= 0 && x < tailleGrille && y >= 0 && y < tailleGrille) {
+            ElementDeJeu element = grille[x][y];
+
+            if (element != null && !(element instanceof Utilisable)) {
+                System.out.println("Case occupée par un personnage ou un objet non utilisable.");
+                return false;
+            }
+
+            return true;
+        }
+        return false;
+    }
+
+    public void actionElement(ElementDeJeu element) {
+        Random rand = new Random();
+        List<Integer> choix = new ArrayList<>();
+        List<Creature> ciblesPotentielles =  new ArrayList<>();
+        if (element instanceof Deplacable) {
+            choix.add(0);
+        }
+        if (element instanceof Combattant combattant) {
+            ciblesPotentielles = selectCibles(element.getPos(), combattant.getDistAttMax());
+            if (!ciblesPotentielles.isEmpty()){
+                choix.add(2);
+            }
+        }
+
+        if (element instanceof Personnage personnage && !personnage.getInventaire().isEmpty()) {
+            choix.add(1);
+        }
+        if (choix.size() <= 0) {
+            return;
+        }
+
+        int randomIndexChoix = rand.nextInt(choix.size());
+
+        switch (choix.get(randomIndexChoix)) {
+            case 0 -> {
+                if (element instanceof NuageToxique nuageToxique) {
+                    if (!ciblesPotentielles.isEmpty()) {
+                        for (Creature cible : ciblesPotentielles) {
+                            nuageToxique.combattre(cible);
+                            if (cible.estMorte()) {
+                                grille[cible.getPos().getX()][cible.getPos().getY()] = null;
+                                System.out.println("RIP " + cible.toString());
+                            }
+                        }
+                    }
+                }
+
+                System.out.println("\nAction : déplacement d'un élément");
+                System.out.println(element);
+                boolean deplacementValide = false;
+
+                while (!deplacementValide) {
+                    int randomInt;
+                    do {
+                        randomInt = rand.nextInt(8) + 1;
+                    } while (randomInt == 5);
+
+                    Point2D nouvellePos = calculerNouvellePosition(element.getPos(), randomInt);
+
+                    while (nouvellePos == null || !World.estDeplacementValide(nouvellePos)) {
+                        do {
+                            randomInt = rand.nextInt(8) + 1;
+                        } while (randomInt == 5);
+                        nouvellePos = calculerNouvellePosition(element.getPos(), randomInt);
+                    }// potentiellement une boucle infinie si le personnage est bloqué
+                    deplacementValide = true;
+                    grille[element.getPos().getX()][element.getPos().getY()] = null;
+                    element.setPos(nouvellePos);
+                    grille[nouvellePos.getX()][nouvellePos.getY()] = element;
+                }
+            }
+
+            case 1 -> {
+                int randomIndexInventaire = rand.nextInt(((Personnage) element).getInventaire().size());
+                System.out.println("\nAction : personnage utilise objet --> " + ((Personnage) element).getInventaire().get(randomIndexInventaire).toString());
+                System.out.println(((Personnage) element));
+                ((Personnage) element).utiliserUtilisable(randomIndexInventaire);
+            }
+
+            case 2 -> {
+                System.out.println("\nAction : combat");
+                System.out.println(element);
+                if (element instanceof NuageToxique nuageToxique) {
+                    for (Creature cible : ciblesPotentielles) {
+                        nuageToxique.combattre(cible);
+                        if (cible.estMorte()) {
+                            grille[cible.getPos().getX()][cible.getPos().getY()] = null;
+                            System.out.println("RIP " + cible.toString());
+                        }
+                    }
+                } else {
+                    int randomIndex = rand.nextInt(ciblesPotentielles.size());
+                    Creature cible = ciblesPotentielles.get(randomIndex);
+                    ((Combattant) element).combattre(cible);
+                    if (cible.estMorte()) {
+                        grille[cible.getPos().getX()][cible.getPos().getY()] = null;
+                        System.out.println("RIP " + cible.toString());
+                    }
+                }
+                
+            }
+        }
+    }
+
+    public void tourDeJeu() {
+        afficherWorld();
+        joueur.actionJoueur();
+        joueur.getPersonnage().majEffets();
+
+        List<ElementDeJeu> elementsTraites = new ArrayList<>();
+
+        System.out.println("\n---------------- Actions des autres créatures");
+
+        for (int i = 0; i < grille.length; i++) {
+            for (int j = 0; j < grille[0].length; j++) {
+
+                if (!(i == joueur.getPersonnage().getPos().getX() && j == joueur.getPersonnage().getPos().getY())) {
+                    ElementDeJeu element = grille[i][j];
+
+                    if (element != null && !elementsTraites.contains(element)) {
+                        elementsTraites.add(element);
+                        actionElement(element);
+                        if(element instanceof Personnage personnage){
+                            personnage.majEffets();
+                        }
+                    }
+                }
+            }
+        }
+    }
+            
+    public ElementDeJeu[][] getGrille() {
+        return grille;
+    }
+
+    public Joueur getJoueur() {
+        return joueur;
+    }
+
 }
-    }
-}
-
-    

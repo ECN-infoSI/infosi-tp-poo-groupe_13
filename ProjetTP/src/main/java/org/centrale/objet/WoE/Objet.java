@@ -6,34 +6,16 @@ package org.centrale.objet.WoE;
 
 /**
  *
- * @author Nadhem
+ * @author leovdb
  */
 public class Objet extends ElementDeJeu {
-   
 
-    /**
-     *
-     * @param pos
-     */
     public Objet(Point2D pos) {
         super(pos);
     }
 
-    /**
-     *
-     */
     public Objet() {
         super();
     }
 
-    /**
-     *
-     * @param ob
-     */
-    public Objet(Objet ob) {
-        super(ob);
-    }
-
-   
-    
 }

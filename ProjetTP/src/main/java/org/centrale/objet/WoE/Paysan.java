@@ -4,39 +4,31 @@
  */
 package org.centrale.objet.WoE;
 
+import java.util.Random;
+
 /**
  *
- * @author Nadhem
+ * @author leovdb
  */
 public class Paysan extends Personnage {
 
-    /**
-     *
-     * @param n
-     * @param pV
-     * @param dA
-     * @param pPar
-     * @param paAtt
-     * @param paPar
-     * @param dMax
-     * @param p
-     */
-    public Paysan(String n, int pV, int dA, int pPar, int paAtt, int paPar, int dMax, Point2D p){
-        super(n,pV,dA,pPar,paAtt,paPar,dMax,p);
+    public Paysan(String n, int pV, int dA, int ptPar, int paAtt, int paPar, int dMax, Point2D p) {
+        super(n, pV, dA, ptPar, paAtt, paPar, dMax, p);
     }
 
-    /**
-     *
-     * @param p
-     */
-    public Paysan(Paysan p){
-        super(p);
+    public Paysan(String nom) {
+        super(nom,
+                randomBetween(25, 75),
+                0,
+                0,
+                0,
+                0,
+                0,
+                new Point2D(0, 0));
     }
-
-    /**
-     *
-     */
-    public Paysan(){
-        super();
+    
+    private static int randomBetween(int min, int max) {
+        Random rand = new Random();
+        return rand.nextInt((max - min) + 1) + min;
     }
 }

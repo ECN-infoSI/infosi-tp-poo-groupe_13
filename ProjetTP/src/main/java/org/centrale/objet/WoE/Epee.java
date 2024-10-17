@@ -4,10 +4,42 @@
  */
 package org.centrale.objet.WoE;
 
+import java.util.Random;
+
 /**
  *
- * @author Nadhem
+ * @author leovdb
  */
-public class Epee extends Objet{
+public class Epee extends Objet implements Utilisable {
+
+    private int degAtt;
+
+    public Epee(int degAtt, Point2D p) {
+        super(p);
+        this.degAtt = degAtt;
+    }
     
+    public Epee() {
+        super();
+        this.degAtt = randomBetween(5,50);
+    }
+    
+    private static int randomBetween(int min, int max) {
+        Random rand = new Random();
+        return rand.nextInt((max - min) + 1) + min;
+    }
+
+    @Override
+    public void utiliser(Personnage perso) {
+        System.out.println(perso.getNom()+" utilise l'épée et gagne "+this.getDegAtt() + " d'attaque");
+        perso.setDegAtt(perso.getDegAtt() + this.degAtt);
+    }
+
+    public int getDegAtt() {
+        return degAtt;
+    }
+
+    public void setDegAtt(int degAtt) {
+        this.degAtt = degAtt;
+    }
 }
