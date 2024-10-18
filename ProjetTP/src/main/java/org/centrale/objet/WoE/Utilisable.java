@@ -8,10 +8,11 @@ package org.centrale.objet.WoE;
  *
  * @author leovdb
  */
-public interface Deplacable {
+public interface Utilisable {
 
     /**
      *
+     * @param perso
      */
-    void deplace();
+    void utiliser(Personnage perso);
 }

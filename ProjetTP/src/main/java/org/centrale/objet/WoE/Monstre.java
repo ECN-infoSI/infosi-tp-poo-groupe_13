@@ -4,15 +4,14 @@
  */
 package org.centrale.objet.WoE;
 
-
-
+import java.util.List;
+import java.util.Random;
 
 /**
  *
- * @author samer
+ * @author leovdb
  */
-public class Monstre extends Creature{
-
+public class Monstre extends Creature {
 
     /**
      *
@@ -26,28 +25,12 @@ public class Monstre extends Creature{
     public Monstre(int ptVie, int degAtt, int ptPar, int pageAtt, int pagePar, Point2D pos) {
         super(ptVie, degAtt, ptPar, pageAtt, pagePar, pos);
     }
-    
-    /**
-     *
-     * @param m
-     */
-    public Monstre(Monstre m){
-        super((Creature)m);
-        //il faut modifier ce constructeur pour gere le clonage
-    }
-    
+
     /**
      *
      */
-    public Monstre(){
+    public Monstre() {
         super();
     }
-    
 
-
-
-
-
-    
 }
-

@@ -6,31 +6,38 @@ package org.centrale.objet.WoE;
 
 /**
  *
- * @author Nadhem
+ * @author leovdb
  */
-public class PotionSoin extends Objet {
-    /**
-     * représente les points de vie gagnés lors d'utilisation
-     */
+public class PotionSoin extends Objet implements Utilisable {
+
     private int ptVie;
-    
+
     /**
      *
      */
-    public PotionSoin(){
+    public PotionSoin() {
         super();
         this.ptVie = 25;
-
     }
-    
+
     /**
      *
      * @param ptVie
      * @param p
      */
-    public PotionSoin(int ptVie, Point2D p){
+    public PotionSoin(int ptVie, Point2D p) {
         super();
         this.ptVie = ptVie;
+    }
+
+    /**
+     *
+     * @param perso
+     */
+    @Override
+    public void utiliser(Personnage perso) {
+        System.out.println(perso.getNom()+" utilise la potion gagne " + this.getPtVie() + " points de vie");
+        perso.setPtVie(perso.getPtVie() + this.ptVie);
     }
 
     /**
@@ -49,5 +56,4 @@ public class PotionSoin extends Objet {
         this.ptVie = ptVie;
     }
 
-    
 }

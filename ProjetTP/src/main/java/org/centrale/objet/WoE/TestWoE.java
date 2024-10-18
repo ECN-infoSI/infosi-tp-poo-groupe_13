@@ -1,17 +1,11 @@
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  */
-
 package org.centrale.objet.WoE;
-
-import java.util.Random;
-
-
-
 
 /**
  *
- * @author Nadhem
+ * @author leovdb
  */
 public class TestWoE {
 
@@ -20,39 +14,26 @@ public class TestWoE {
      * @param args
      */
     public static void main(String[] args) {
-       World w=new World();
-       w.setCarre(500000);
-       Random rand = new Random();
-       for (int i=0;i<w.getCarre()*2/5;i++){
-           Archer a=new Archer();
-           a.setNom("robin"+i);
-           w.ajouterPersonnage(a);
-       }
-       for (int i=0;i<w.getCarre()*2/5;i++){
-           Paysan p=new Paysan();
-           p.setNom("peon"+i);
-           w.ajouterPersonnage(p);
-       }
-       for (int i=0;i<w.getCarre()*2/5;i++){
-           Lapin l=new Lapin();
-           w.ajouterMonstre(l);
-       }
-       for (int i=0;i<w.getCarre()*2/5;i++){
-           Guerrier g=new Guerrier();
-           g.setNom("GrosBill"+i);
-           w.ajouterPersonnage(g);
-       }
-       for (int i=0;i<w.getCarre()*2/5;i++){
-           Loup lou=new Loup();
-           w.ajouterMonstre(lou);
-       }
-       w.creerMondeAlea();
-       long startTime = System.nanoTime();
-       w.calculerTotalPointsDeVie();
-        long endTime = System.nanoTime();
-        long duration = endTime-startTime;
-       System.out.println("duree : "+duration);
-       
-       
+        String delimiter = "\n-------------------------------------------------";
+        System.out.println("Bienvenue dans le monde de WoE !");
+        World world = new World(10, 3, 3, 3);
+        int i = 1;
+        while ((world.getJoueur().getPersonnage().getPtVie() > 0) && (!(world.getJoueur().joueurIsAlone()))) {
+            System.out.println(world.getJoueur().joueurIsAlone());
+            System.out.println(delimiter.repeat(3));
+            System.out.println("\nTour de jeu n°" + i);
+            
+            world.tourDeJeu();
+            System.out.println(delimiter.repeat(3));
+            i++;
+        }
+        World.afficherWorld();
+        if (world.getJoueur().getPersonnage().getPtVie() > 0){
+            System.out.println(world.getJoueur().getPersonnage().getNom() + " est le vainqueur!!!");
+        }
+        else {
+            System.out.println(world.getJoueur().getPersonnage().getNom()+" est mort :(");
+            
+        }
     }
 }

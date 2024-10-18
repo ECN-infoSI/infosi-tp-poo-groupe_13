@@ -3,15 +3,15 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package org.centrale.objet.WoE;
+
 import java.util.Random;
+
 /**
  *
- * @author Nadhem
+ * @author leovdb
  */
 public class Archer extends Personnage implements Combattant {
-    /**
-     * représente le nombre de fléches
-     */
+
     private int nbFleches;
 
     /**
@@ -19,33 +19,85 @@ public class Archer extends Personnage implements Combattant {
      * @param n
      * @param pV
      * @param dA
-     * @param pPar
+     * @param ptPar
      * @param paAtt
      * @param paPar
      * @param dMax
      * @param p
      * @param nbF
      */
-    public Archer(String n, int pV, int dA, int pPar, int paAtt, int paPar, int dMax, Point2D p,int nbF){
-        super(n,pV,dA,pPar,paAtt,paPar,dMax,p);
-        this.nbFleches=nbF;
+    public Archer(String n, int pV, int dA, int ptPar, int paAtt, int paPar, int dMax, Point2D p, int nbF) {
+        super(n, pV, dA, ptPar, paAtt, paPar, dMax, p);
+        this.nbFleches = nbF;
     }
 
     /**
      *
-     * @param a
+     * @param nom
      */
-    public Archer(Archer a){
-        super(a);
-        this.nbFleches=a.nbFleches;
+    public Archer(String nom) {
+        super(nom,
+                randomBetween(30, 80),
+                randomBetween(15, 25),
+                randomBetween(15, 25),
+                randomBetween(50, 70),
+                randomBetween(10, 30),
+                randomBetween(2, 4),
+                new Point2D(0, 0));
+        this.nbFleches = randomBetween(5, 15);
+    }
+
+    private static int randomBetween(int min, int max) {
+        Random rand = new Random();
+        return rand.nextInt((max - min) + 1) + min;
     }
 
     /**
      *
+     * @param c
      */
-    public Archer(){
-        super();
-        this.nbFleches=0;
+    @Override
+    public void combattre(Creature c) {
+        double distance = this.getPos().distance(c.getPos());
+        if (distance < 2) {
+            System.out.println("Combat au corps a corps sur "+c.toString());
+            Random rand = new Random();
+            int randAtt = rand.nextInt(101);
+            if (randAtt <= this.getPageAtt()) {
+                System.out.println("Attaque reussie");
+
+                int randDef = rand.nextInt(101);
+                if (randDef > c.getPagePar()) {
+                    c.setPtVie(c.getPtVie() - this.getDegAtt());
+                    System.out.println("L'adversaire subit " + this.getDegAtt() + " degats.");
+                } else {
+                    int degatsSubis = this.getDegAtt() - c.getPtPar();
+                    if (degatsSubis < 0) {
+                        degatsSubis = 0;
+                    }
+                    c.setPtVie(c.getPtVie() - degatsSubis);
+                    System.out.println("L'adversaire parvient à parer, il subit " + degatsSubis + " degats.");
+                }
+            } else {
+                System.out.println("Attaque ratee");
+            }
+        } else if (this.nbFleches > 0) {
+            System.out.println("Combat a distance sur "+c.toString());
+            Random rand = new Random();
+            int randAtt = rand.nextInt(101);
+            if (randAtt <= this.getPageAtt()) {
+                System.out.println("Attaque reussie");
+                c.setPtVie(c.getPtVie() - this.getDegAtt());
+                System.out.println("L'adversaire subit " + this.getDegAtt() + " degats.");
+            } else {
+                System.out.println("Attaque ratee");
+            }
+
+            this.nbFleches--;
+            System.out.println("L'attaquant perd une fleche, il lui reste " + this.nbFleches + " fleches.");
+        } else {
+            System.out.println("L'archer n'as plus de flêche, il ne peut pas attaquer à cette distance.");
+        }
     }
 
     /**
@@ -63,64 +115,4 @@ public class Archer extends Personnage implements Combattant {
     public int getNbFleches() {
         return nbFleches;
     }
-    
-    /**
-     * La méthode permet à un personnage d'attaquer un autre personnage, 
-     * soit au corps à corps, soit à distance. Elle prend en compte la distance entre 
-     * les deux personnages, ainsi que les chances de succès de l'attaque et de la parade.
-     * @param c
-     */
-    @Override
-    public void combattre(Creature c){
-        double distance=this.getPos().distance(c.getPos());
-        if (distance == 1) {
-        // Combat au corps à corps
-        System.out.println("Combat au corps à corps");
-
-        // Jet d'attaque pour l'attaquant
-        Random rand = new Random();
-        int randAtt = rand.nextInt(101);
-        if (randAtt <= this.getPageAtt()) {
-            System.out.println("Attaque reussie");
-            
-            // Jet de défense pour l'adversaire
-            int randDef = rand.nextInt(101);
-            if (randDef > c.getPagePar()) {
-                // Si la parade échoue, l'adversaire subit tous les dégâts
-                c.setPtVie(c.getPtVie()-this.getDegAtt());
-                System.out.println("L'adversaire subit " + this.getDegAtt() + " degats.");
-            } else {
-                // Si la parade réussit, l'adversaire atténue les dégâts
-                int degatsSubis = this.getDegAtt() - c.getPtPar();
-                if (degatsSubis < 0) degatsSubis = 0;  // Empêche les dégâts négatifs
-                c.setPtVie(c.getPtVie()-degatsSubis);
-                System.out.println("L'adversaire parvient à parer, il subit " + degatsSubis + " degats.");
-            }
-        } else {
-            System.out.println("Attaque ratee");
-        }
-    } else if (distance > 1 && distance <= this.getDistAttMax()&& this.nbFleches >0 ) {
-        // Combat à distance
-        System.out.println("Combat a distance");
-
-        // Jet d'attaque pour l'attaquant
-        Random rand = new Random();
-        int randAtt = rand.nextInt(101);
-        if (randAtt <= this.getPageAtt()) {
-            System.out.println("Attaque reussie");
-            c.setPtVie(c.getPtVie()-this.getDegAtt());
-            System.out.println("L'adversaire subit " + this.getDegAtt() + " degats.");
-        } else {
-            System.out.println("Attaque ratee");
-        }
-
-        // L'attaquant perd un projectile (flèche par exemple)
-        this.nbFleches--;
-        System.out.println("L'attaquant perd une fleche, il lui reste " + this.nbFleches + " fleches.");
-    } else {
-        System.out.println("L'adversaire est hors de portee.");
-    }
-}
-        
-    
 }

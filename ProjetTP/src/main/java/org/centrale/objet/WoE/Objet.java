@@ -6,10 +6,9 @@ package org.centrale.objet.WoE;
 
 /**
  *
- * @author Nadhem
+ * @author leovdb
  */
 public class Objet extends ElementDeJeu {
-   
 
     /**
      *
@@ -26,14 +25,4 @@ public class Objet extends ElementDeJeu {
         super();
     }
 
-    /**
-     *
-     * @param ob
-     */
-    public Objet(Objet ob) {
-        super(ob);
-    }
-
-   
-    
 }

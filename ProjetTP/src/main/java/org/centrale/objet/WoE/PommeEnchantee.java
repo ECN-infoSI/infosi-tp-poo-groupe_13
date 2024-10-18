@@ -10,33 +10,24 @@ import java.util.Random;
  *
  * @author leovdb
  */
-public class Lapin extends Monstre {
-
-    /**
-     *
-     * @param pV
-     * @param dA
-     * @param pPar
-     * @param paAtt
-     * @param paPar
-     * @param p
-     */
-    public Lapin(int pV, int dA, int pPar, int paAtt, int paPar, Point2D p) {
-        super(pV, dA, pPar, paAtt, paPar, p);
-    }
+public class PommeEnchantee extends Nourriture {
 
     /**
      *
      */
-    public Lapin() {
-        super(randomBetween(5, 15),
-                0,
-                0,
-                0,
-                0,
-                new Point2D(0, 0));
+    public PommeEnchantee() {
+        super("Pomme enchanté", randomBetween(20,40), randomBetween(1,3), "force");
     }
-
+    
+    /**
+     *
+     * @param perso
+     */
+    @Override
+    public void retablirEffet(Personnage perso){
+        perso.setDegAtt(perso.getDegAtt() - this.getModificationCarac());
+    }
+    
     private static int randomBetween(int min, int max) {
         Random rand = new Random();
         return rand.nextInt((max - min) + 1) + min;
