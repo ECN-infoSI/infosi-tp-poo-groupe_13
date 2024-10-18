@@ -20,6 +20,15 @@ public class Creature extends ElementDeJeu implements Deplacable {
 
     private int pagePar;
 
+    /**
+     *
+     * @param ptVie
+     * @param degAtt
+     * @param ptPar
+     * @param pageAtt
+     * @param pagePar
+     * @param pos
+     */
     public Creature(int ptVie, int degAtt, int ptPar, int pageAtt, int pagePar, Point2D pos) {
         super(pos);
         this.ptVie = ptVie;
@@ -28,7 +37,10 @@ public class Creature extends ElementDeJeu implements Deplacable {
         this.pageAtt = pageAtt;
         this.pagePar = pagePar;
     }
-    
+
+    /**
+     *
+     */
     public Creature() {
         super();
         this.ptVie = 0;
@@ -38,11 +50,9 @@ public class Creature extends ElementDeJeu implements Deplacable {
         this.pagePar = 0;
     }
 
-    @Override
-    public void deplace() {
-        //TODO
-    }
-
+    /**
+     *
+     */
     public void affiche() {
         System.out.println("\nPoints de vie: " + this.ptVie);
         System.out.println("Degats d'attaque: " + this.degAtt);
@@ -53,47 +63,91 @@ public class Creature extends ElementDeJeu implements Deplacable {
             System.out.println("Distance d'attaque: " + personnage.getDistAttMax());
         }
     }
-    
-    public boolean estMorte(){
-        return this.getPtVie()<=0;
+
+    /**
+     *
+     * @return
+     */
+    public boolean estMorte() {
+        return this.getPtVie() <= 0;
     }
 
+    /**
+     *
+     * @return
+     */
     public int getPtVie() {
         return ptVie;
     }
 
+    /**
+     *
+     * @param ptVie
+     */
     public void setPtVie(int ptVie) {
         this.ptVie = ptVie;
     }
 
+    /**
+     *
+     * @return
+     */
     public int getDegAtt() {
         return degAtt;
     }
 
+    /**
+     *
+     * @param degAtt
+     */
     public void setDegAtt(int degAtt) {
         this.degAtt = degAtt;
     }
 
+    /**
+     *
+     * @return
+     */
     public int getPtPar() {
         return ptPar;
     }
 
+    /**
+     *
+     * @param ptPar
+     */
     public void setPtPar(int ptPar) {
         this.ptPar = ptPar;
     }
 
+    /**
+     *
+     * @return
+     */
     public int getPageAtt() {
         return pageAtt;
     }
 
+    /**
+     *
+     * @param pageAtt
+     */
     public void setPageAtt(int pageAtt) {
         this.pageAtt = pageAtt;
     }
 
+    /**
+     *
+     * @return
+     */
     public int getPagePar() {
         return pagePar;
     }
 
+    /**
+     *
+     * @param pagePar
+     */
     public void setPagePar(int pagePar) {
         this.pagePar = pagePar;
     }

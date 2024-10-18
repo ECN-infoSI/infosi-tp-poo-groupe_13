@@ -12,11 +12,25 @@ import java.util.Random;
  */
 public class Guerrier extends Personnage implements Combattant {
 
+    /**
+     *
+     * @param n
+     * @param pV
+     * @param dA
+     * @param ptPar
+     * @param paAtt
+     * @param paPar
+     * @param dMax
+     * @param p
+     */
     public Guerrier(String n, int pV, int dA, int ptPar, int paAtt, int paPar, int dMax, Point2D p) {
         super(n, pV, dA, ptPar, paAtt, paPar, dMax, p);
-
     }
 
+    /**
+     *
+     * @param nom
+     */
     public Guerrier(String nom) {
         super(nom,
                 randomBetween(50, 100),
@@ -28,14 +42,24 @@ public class Guerrier extends Personnage implements Combattant {
                 new Point2D(0, 0));
     }
 
+    /**
+     *
+     * @param min
+     * @param max
+     * @return
+     */
     private static int randomBetween(int min, int max) {
         Random rand = new Random();
         return rand.nextInt((max - min) + 1) + min;
     }
 
+    /**
+     *
+     * @param c
+     */
     @Override
     public void combattre(Creature c) {
-        System.out.println("Combat au corps à corps sur "+c.toString());
+        System.out.println("Combat au corps à corps sur " + c.toString());
         Random rand = new Random();
         int randAtt = rand.nextInt(101);
         if (randAtt <= this.getPageAtt()) {

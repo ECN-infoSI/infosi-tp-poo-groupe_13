@@ -14,11 +14,27 @@ public class Archer extends Personnage implements Combattant {
 
     private int nbFleches;
 
+    /**
+     *
+     * @param n
+     * @param pV
+     * @param dA
+     * @param ptPar
+     * @param paAtt
+     * @param paPar
+     * @param dMax
+     * @param p
+     * @param nbF
+     */
     public Archer(String n, int pV, int dA, int ptPar, int paAtt, int paPar, int dMax, Point2D p, int nbF) {
         super(n, pV, dA, ptPar, paAtt, paPar, dMax, p);
         this.nbFleches = nbF;
     }
 
+    /**
+     *
+     * @param nom
+     */
     public Archer(String nom) {
         super(nom,
                 randomBetween(30, 80),
@@ -31,16 +47,26 @@ public class Archer extends Personnage implements Combattant {
         this.nbFleches = randomBetween(5, 15);
     }
 
+    /**
+     *
+     * @param min
+     * @param max
+     * @return
+     */
     private static int randomBetween(int min, int max) {
         Random rand = new Random();
         return rand.nextInt((max - min) + 1) + min;
     }
 
+    /**
+     *
+     * @param c
+     */
     @Override
     public void combattre(Creature c) {
         double distance = this.getPos().distance(c.getPos());
         if (distance < 2) {
-            System.out.println("Combat au corps à corps sur "+c.toString());
+            System.out.println("Combat au corps à corps sur " + c.toString());
             Random rand = new Random();
             int randAtt = rand.nextInt(101);
             if (randAtt <= this.getPageAtt()) {
@@ -62,7 +88,7 @@ public class Archer extends Personnage implements Combattant {
                 System.out.println("Attaque ratee");
             }
         } else if (this.nbFleches > 0) {
-            System.out.println("Combat a distance sur "+c.toString());
+            System.out.println("Combat a distance sur " + c.toString());
             Random rand = new Random();
             int randAtt = rand.nextInt(101);
             if (randAtt <= this.getPageAtt()) {
@@ -80,10 +106,18 @@ public class Archer extends Personnage implements Combattant {
         }
     }
 
+    /**
+     *
+     * @param nbFleches
+     */
     public void setNbFleches(int nbFleches) {
         this.nbFleches = nbFleches;
     }
 
+    /**
+     *
+     * @return
+     */
     public int getNbFleches() {
         return nbFleches;
     }

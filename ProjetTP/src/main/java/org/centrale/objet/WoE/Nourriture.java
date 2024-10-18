@@ -15,20 +15,52 @@ public class Nourriture extends Objet implements Utilisable {
     private int dureeEffet;
     private String typeCaracteristique;
 
+    /**
+     *
+     * @param nom
+     * @param modificationCarac
+     * @param dureeEffet
+     * @param typeCaracteristique
+     */
     public Nourriture(String nom, int modificationCarac, int dureeEffet, String typeCaracteristique) {
+        super();
         this.nom = nom;
         this.modificationCarac = modificationCarac;
         this.dureeEffet = dureeEffet;
         this.typeCaracteristique = typeCaracteristique;
     }
 
+    /**
+     *
+     * @param p
+     * @param nom
+     * @param modificationCarac
+     * @param dureeEffet
+     * @param typeCaracteristique
+     */
+    public Nourriture(Point2D p, String nom, int modificationCarac, int dureeEffet, String typeCaracteristique) {
+        super(p);
+        this.nom = nom;
+        this.modificationCarac = modificationCarac;
+        this.dureeEffet = dureeEffet;
+        this.typeCaracteristique = typeCaracteristique;
+    }
+
+    /**
+     *
+     * @param perso
+     */
     @Override
     public void utiliser(Personnage perso) {
-        System.out.println(perso.getNom()+" utilise "+this.getNom());
+        System.out.println(perso.getNom() + " utilise " + this.getNom());
         perso.ajouterEffetActif(this);
         this.appliquerEffet(perso);
     }
 
+    /**
+     *
+     * @param perso
+     */
     public void appliquerEffet(Personnage perso) {
         switch (typeCaracteristique) {
             case "force" ->
@@ -37,28 +69,60 @@ public class Nourriture extends Objet implements Utilisable {
                 perso.setDistAttMax(perso.getDistAttMax() + modificationCarac);
         }
     }
-    
-    public void retablirEffet(Personnage perso){
+
+    /**
+     *
+     * @param perso
+     */
+    public void retablirEffet(Personnage perso) {
     }
 
+    /**
+     *
+     * @return
+     */
     public boolean estExpiree() {
         return dureeEffet <= 0;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getNom() {
         return nom;
     }
-    
-    public int getDureeEffet(){
+
+    /**
+     *
+     * @return
+     */
+    public int getDureeEffet() {
         return dureeEffet;
     }
-    
-    public void setDureeEffet(int dureeEffet){
+
+    /**
+     *
+     * @param dureeEffet
+     */
+    public void setDureeEffet(int dureeEffet) {
         this.dureeEffet = dureeEffet;
     }
-    
-    public int getModificationCarac(){
+
+    /**
+     *
+     * @return
+     */
+    public int getModificationCarac() {
         return modificationCarac;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public String getTypeCarac() {
+        return typeCaracteristique;
     }
 
 }

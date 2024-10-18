@@ -11,7 +11,15 @@ package org.centrale.objet.WoE;
  */
 public interface Combattant {
 
+    /**
+     *
+     * @param c
+     */
     void combattre(Creature c);
-    
+
+    /**
+     *
+     * @return
+     */
     int getDistAttMax();
 }

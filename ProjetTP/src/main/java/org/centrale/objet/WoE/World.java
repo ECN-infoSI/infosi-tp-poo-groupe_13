@@ -23,8 +23,22 @@ public final class World {
     private static Joueur joueur;
     private Scanner scanner;
 
+    /**
+     *
+     */
+    public World() {
+        grille = new ElementDeJeu[0][0];
+    }
+
+    /**
+     *
+     * @param tailleGrille
+     * @param nbPersonnages
+     * @param nbMonstres
+     * @param nbObjets
+     */
     public World(int tailleGrille, int nbPersonnages, int nbMonstres, int nbObjets) {
-        this.tailleGrille = tailleGrille;
+        World.tailleGrille = tailleGrille;
         grille = new ElementDeJeu[tailleGrille][tailleGrille];
         personnages = new ArrayList<>();
         monstres = new ArrayList<>();
@@ -36,6 +50,11 @@ public final class World {
         placerSurGrille(joueur.getPersonnage());
     }
 
+    /**
+     *
+     * @param nom
+     * @return
+     */
     public static Personnage creerPersonnageAlea(String nom) {
         Random rand = new Random();
         return switch (rand.nextInt(3)) {
@@ -50,6 +69,10 @@ public final class World {
         };
     }
 
+    /**
+     *
+     * @return
+     */
     public static Monstre creerMonstreAlea() {
         Random rand = new Random();
         return switch (rand.nextInt(2)) {
@@ -62,6 +85,10 @@ public final class World {
         };
     }
 
+    /**
+     *
+     * @return
+     */
     public static Objet creerObjetAlea() {
         Random rand = new Random();
         return switch (rand.nextInt(5)) {
@@ -80,6 +107,12 @@ public final class World {
         };
     }
 
+    /**
+     *
+     * @param nbPersonnages
+     * @param nbMonstres
+     * @param nbObjets
+     */
     public void creerMondeAlea(int nbPersonnages, int nbMonstres, int nbObjets) {
 
         for (int i = 0; i < nbPersonnages; i++) {
@@ -101,6 +134,10 @@ public final class World {
         }
     }
 
+    /**
+     *
+     * @param element
+     */
     public void placerSurGrille(ElementDeJeu element) {
         Random rand = new Random();
         int x, y;
@@ -112,6 +149,12 @@ public final class World {
         element.setPos(new Point2D(x, y));
     }
 
+    /**
+     *
+     * @param positionActuelle
+     * @param direction
+     * @return
+     */
     public static Point2D calculerNouvellePosition(Point2D positionActuelle, int direction) {
         int x = positionActuelle.getX();
         int y = positionActuelle.getY();
@@ -140,6 +183,12 @@ public final class World {
         };
     }
 
+    /**
+     *
+     * @param positionCreature
+     * @param porteeAttaque
+     * @return
+     */
     public static List<Creature> selectCibles(Point2D positionCreature, int porteeAttaque) {
 
         List<Creature> ciblesPotentielles = new ArrayList<>();
@@ -161,6 +210,9 @@ public final class World {
         return ciblesPotentielles;
     }
 
+    /**
+     *
+     */
     public static void afficherWorld() {
         joueur.getPersonnage().affiche();
         System.out.println("\nVotre inventaire : ");
@@ -183,6 +235,11 @@ public final class World {
         joueur.afficherPosition();
     }
 
+    /**
+     *
+     * @param nouvellePos
+     * @return
+     */
     public static boolean estDeplacementValide(Point2D nouvellePos) {
         int x = nouvellePos.getX();
         int y = nouvellePos.getY();
@@ -191,7 +248,6 @@ public final class World {
             ElementDeJeu element = grille[x][y];
 
             if (element != null && !(element instanceof Utilisable)) {
-                System.out.println("Case occupée par un personnage ou un objet non utilisable.");
                 return false;
             }
 
@@ -200,16 +256,20 @@ public final class World {
         return false;
     }
 
+    /**
+     *
+     * @param element
+     */
     public void actionElement(ElementDeJeu element) {
         Random rand = new Random();
         List<Integer> choix = new ArrayList<>();
-        List<Creature> ciblesPotentielles =  new ArrayList<>();
+        List<Creature> ciblesPotentielles = new ArrayList<>();
         if (element instanceof Deplacable) {
             choix.add(0);
         }
         if (element instanceof Combattant combattant) {
             ciblesPotentielles = selectCibles(element.getPos(), combattant.getDistAttMax());
-            if (!ciblesPotentielles.isEmpty()){
+            if (!ciblesPotentielles.isEmpty()) {
                 choix.add(2);
             }
         }
@@ -237,22 +297,33 @@ public final class World {
                     }
                 }
 
-                System.out.println("\nAction : déplacement d'un élément");
+                System.out.println("\nAction : deplacement d'un element");
                 System.out.println(element);
                 boolean deplacementValide = false;
 
                 while (!deplacementValide) {
+
                     int randomInt;
                     do {
-                        randomInt = rand.nextInt(8) + 1;
+                        randomInt = rand.nextInt(9) + 1;
                     } while (randomInt == 5);
 
                     Point2D nouvellePos = calculerNouvellePosition(element.getPos(), randomInt);
+                    List<Integer> uniqueNumbers = new ArrayList<>();
+                    int maxSize = 8; // List can hold up to 8 unique numbers (excluding 5)
 
                     while (nouvellePos == null || !World.estDeplacementValide(nouvellePos)) {
                         do {
-                            randomInt = rand.nextInt(8) + 1;
+                            randomInt = rand.nextInt(9) + 1;
                         } while (randomInt == 5);
+
+                        if (!uniqueNumbers.contains(randomInt)) {
+                            uniqueNumbers.add(randomInt);
+                        } else if (uniqueNumbers.size() == maxSize) {
+                            nouvellePos = element.getPos();
+                            System.out.println("deplacement impossible");
+                            break;
+                        }
                         nouvellePos = calculerNouvellePosition(element.getPos(), randomInt);
                     }// potentiellement une boucle infinie si le personnage est bloqué
                     deplacementValide = true;
@@ -289,11 +360,14 @@ public final class World {
                         System.out.println("RIP " + cible.toString());
                     }
                 }
-                
+
             }
         }
     }
 
+    /**
+     *
+     */
     public void tourDeJeu() {
         afficherWorld();
         joueur.actionJoueur();
@@ -301,7 +375,7 @@ public final class World {
 
         List<ElementDeJeu> elementsTraites = new ArrayList<>();
 
-        System.out.println("\n---------------- Actions des autres créatures");
+        System.out.println("\n---------------- Actions des autres creatures");
 
         for (int i = 0; i < grille.length; i++) {
             for (int j = 0; j < grille[0].length; j++) {
@@ -312,7 +386,7 @@ public final class World {
                     if (element != null && !elementsTraites.contains(element)) {
                         elementsTraites.add(element);
                         actionElement(element);
-                        if(element instanceof Personnage personnage){
+                        if (element instanceof Personnage personnage) {
                             personnage.majEffets();
                         }
                     }
@@ -320,13 +394,45 @@ public final class World {
             }
         }
     }
-            
+
+    /**
+     *
+     * @return
+     */
     public ElementDeJeu[][] getGrille() {
         return grille;
     }
 
+    /**
+     *
+     * @param grille
+     */
+    public void setGrille(ElementDeJeu[][] grille) {
+        World.grille = grille;
+    }
+
+    /**
+     *
+     * @param taille
+     */
+    public void setTailleGrille(int taille) {
+        World.tailleGrille = taille;
+    }
+
+    /**
+     *
+     * @return
+     */
     public Joueur getJoueur() {
         return joueur;
+    }
+
+    /**
+     *
+     * @param joueur
+     */
+    public void setJoueur(Joueur joueur) {
+        World.joueur = joueur;
     }
 
 }

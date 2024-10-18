@@ -21,26 +21,52 @@ public class Personnage extends Creature {
     private List<Nourriture> effetsActifs = new ArrayList<>();
     private List<Utilisable> inventaire = new ArrayList<>();
 
+    /**
+     *
+     * @param n
+     * @param pV
+     * @param dA
+     * @param pPar
+     * @param paAtt
+     * @param paPar
+     * @param dMax
+     * @param p
+     */
     public Personnage(String n, int pV, int dA, int pPar, int paAtt, int paPar, int dMax, Point2D p) {
         super(pV, dA, pPar, paAtt, paPar, p);
         nom = n;
         distAttMax = dMax;
     }
-    
+
+    /**
+     *
+     */
     public Personnage() {
         super();
         nom = "";
         distAttMax = 0;
     }
 
+    /**
+     *
+     * @param effet
+     */
     public void ajouterEffetActif(Nourriture effet) {
         effetsActifs.add(effet);
     }
 
+    /**
+     *
+     * @param utilisable
+     */
     public void ajouterUtilisable(Utilisable utilisable) {
         inventaire.add(utilisable);
     }
 
+    /**
+     *
+     * @param index
+     */
     public void utiliserUtilisable(int index) {
         if (index >= 0 && index < inventaire.size()) {
             Utilisable utilisable = inventaire.remove(index);
@@ -50,25 +76,34 @@ public class Personnage extends Creature {
         }
     }
 
+    /**
+     *
+     */
     public void majEffets() {
         Iterator<Nourriture> it = effetsActifs.iterator();
         while (it.hasNext()) {
             Nourriture effet = it.next();
-            effet.setDureeEffet(effet.getDureeEffet()-1);
+            effet.setDureeEffet(effet.getDureeEffet() - 1);
             if (effet.estExpiree()) {
-                System.out.println("Fin de l'effet "+effet.getNom()+" sur "+this.getNom());
+                System.out.println("Fin de l'effet " + effet.getNom() + " sur " + this.getNom());
                 effet.retablirEffet(this);
                 it.remove();
             }
         }
     }
 
+    /**
+     *
+     */
     public void afficherInventaire() {
         for (int i = 0; i < inventaire.size(); i++) {
             System.out.println(i + ": " + inventaire.get(i));
         }
     }
 
+    /**
+     *
+     */
     public void afficherEffets() {
         for (int i = 0; i < effetsActifs.size(); i++) {
             Nourriture nourriture = effetsActifs.get(i);
@@ -76,23 +111,51 @@ public class Personnage extends Creature {
         }
     }
 
+    /**
+     *
+     * @return
+     */
     public String getNom() {
         return nom;
     }
 
+    /**
+     *
+     * @param nom
+     */
     public void setNom(String nom) {
         this.nom = nom;
     }
 
+    /**
+     *
+     * @return
+     */
     public int getDistAttMax() {
         return distAttMax;
     }
 
+    /**
+     *
+     * @param distAttMax
+     */
     public void setDistAttMax(int distAttMax) {
         this.distAttMax = distAttMax;
     }
 
+    /**
+     *
+     * @return
+     */
     public List<Utilisable> getInventaire() {
         return inventaire;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public List<Nourriture> getEffet() {
+        return effetsActifs;
     }
 }

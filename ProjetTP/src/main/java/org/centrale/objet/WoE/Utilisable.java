@@ -10,5 +10,9 @@ package org.centrale.objet.WoE;
  */
 public interface Utilisable {
 
+    /**
+     *
+     * @param perso
+     */
     void utiliser(Personnage perso);
 }

@@ -13,55 +13,106 @@ public class Point2D {
     private int x;
     private int y;
 
+    /**
+     *
+     * @param a
+     * @param b
+     */
     public Point2D(int a, int b) {
         this.x = a;
         this.y = b;
     }
 
+    /**
+     *
+     * @param p
+     */
     public Point2D(Point2D p) {
         this.x = p.x;
         this.y = p.y;
     }
 
+    /**
+     *
+     */
     public Point2D() {
         this.x = 0;
         this.y = 0;
     }
 
+    /**
+     *
+     */
     public void affiche() {
         String res = "[" + this.x + "," + this.y + "]";
         System.out.println(res);
     }
 
+    /**
+     *
+     * @param coordx
+     */
     public void setX(int coordx) {
         this.x = coordx;
     }
 
+    /**
+     *
+     * @param coordy
+     */
     public void setY(int coordy) {
         this.y = coordy;
     }
 
+    /**
+     *
+     * @return
+     */
     public int getX() {
         return this.x;
     }
 
+    /**
+     *
+     * @return
+     */
     public int getY() {
         return this.y;
     }
 
+    /**
+     *
+     * @param coordx
+     * @param coordy
+     */
     public void setposition(int coordx, int coordy) {
         setX(coordx);
         setY(coordy);
     }
 
+    /**
+     *
+     * @param dx
+     * @param dy
+     */
     public void translate(int dx, int dy) {
         setposition(this.x + dx, this.y + dy);
     }
 
+    /**
+     *
+     * @param p
+     * @return
+     */
     public double distance(Point2D p) {
         return Math.sqrt(Math.pow(this.x - p.x, 2) + Math.pow(this.y - p.y, 2));
     }
 
+    /**
+     *
+     * @param obj
+     * @return
+     */
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {

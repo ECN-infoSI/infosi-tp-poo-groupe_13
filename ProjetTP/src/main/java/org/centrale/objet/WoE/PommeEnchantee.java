@@ -12,15 +12,34 @@ import java.util.Random;
  */
 public class PommeEnchantee extends Nourriture {
 
+    /**
+     *
+     */
     public PommeEnchantee() {
-        super("Pomme enchanté", randomBetween(20,40), randomBetween(1,3), "force");
+        super("Pomme-enchanté", randomBetween(20, 40), randomBetween(2, 4), "force");
     }
-    
+
+    /**
+     *
+     * @param p
+     * @param nom
+     * @param modificationCarac
+     * @param dureeEffet
+     * @param typeCaracteristique
+     */
+    public PommeEnchantee(Point2D p, String nom, int modificationCarac, int dureeEffet, String typeCaracteristique) {
+        super(p, nom, modificationCarac, dureeEffet, typeCaracteristique);
+    }
+
+    /**
+     *
+     * @param perso
+     */
     @Override
-    public void retablirEffet(Personnage perso){
+    public void retablirEffet(Personnage perso) {
         perso.setDegAtt(perso.getDegAtt() - this.getModificationCarac());
     }
-    
+
     private static int randomBetween(int min, int max) {
         Random rand = new Random();
         return rand.nextInt((max - min) + 1) + min;

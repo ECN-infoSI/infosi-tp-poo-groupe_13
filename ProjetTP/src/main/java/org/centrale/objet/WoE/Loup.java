@@ -14,11 +14,24 @@ public class Loup extends Monstre implements Combattant {
 
     private int distAttMax;
 
+    /**
+     *
+     * @param pV
+     * @param dA
+     * @param pPar
+     * @param paAtt
+     * @param paPar
+     * @param dMax
+     * @param p
+     */
     public Loup(int pV, int dA, int pPar, int paAtt, int paPar, int dMax, Point2D p) {
         super(pV, dA, pPar, paAtt, paPar, p);
         distAttMax = dMax;
     }
 
+    /**
+     *
+     */
     public Loup() {
         super(randomBetween(20, 50),
                 randomBetween(10, 30),
@@ -28,14 +41,24 @@ public class Loup extends Monstre implements Combattant {
                 new Point2D(0, 0));
     }
 
+    /**
+     *
+     * @param min
+     * @param max
+     * @return
+     */
     private static int randomBetween(int min, int max) {
         Random rand = new Random();
         return rand.nextInt((max - min) + 1) + min;
     }
 
+    /**
+     *
+     * @param c
+     */
     @Override
     public void combattre(Creature c) {
-        System.out.println("Combat au corps à corps sur "+c.toString());
+        System.out.println("Combat au corps à corps sur " + c.toString());
         Random rand = new Random();
         int randAtt = rand.nextInt(101);
         if (randAtt <= this.getPageAtt()) {
@@ -58,12 +81,20 @@ public class Loup extends Monstre implements Combattant {
         }
 
     }
-    
+
+    /**
+     *
+     * @return
+     */
     @Override
     public int getDistAttMax() {
         return distAttMax;
     }
 
+    /**
+     *
+     * @param distAttMax
+     */
     public void setDistAttMax(int distAttMax) {
         this.distAttMax = distAttMax;
     }
